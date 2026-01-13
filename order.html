@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RESERVE PLOT</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body { background:#fff; font-family:sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; margin:0; }
+        .box { background:#fff; padding:40px; border-radius:20px; width:320px; text-align:center; border:2px solid #000; position:relative; z-index:10; }
+        input { width:90%; padding:12px; margin:10px 0; border:2px solid #ddd; border-radius:8px; font-size:16px; outline:none; }
+        input:focus { border-color: #ef4444; }
+        .sub-btn { width:100%; padding:15px; background:#ef4444; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-size:16px; }
+        .back-btn { display:inline-block; margin-top:20px; color:#666; text-decoration:none; font-size:14px; font-weight:bold; }
+        #success-msg { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:100; flex-direction:column; justify-content:center; align-items:center; }
+        .success-text { font-size:28px; font-weight:900; color:#22c55e; margin:10px; text-align:center; }
+    </style>
+</head>
+<body>
+
+    <div class="box" id="order-box">
+        <h2 style="margin-top:0;">RESERVE PLOT</h2>
+        <input type="text" id="bn" placeholder="Your Brand Name">
+        <input type="number" id="pid" placeholder="Plot ID (1-10000)">
+        <button onclick="submitOrder()" class="sub-btn">SUBMIT REQUEST</button>
+        <a href="index.html" class="back-btn">← GO BACK</a>
+    </div>
+
+    <div id="success-msg">
+        <div class="success-text">CONGRATULATIONS! 🎉</div>
+        <div class="success-text" id="welcome-name"></div>
+        <p style="font-size:18px; color:#555;">Welcome to the 10K Legacy Wall</p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script>
+        firebase.initializeApp({databaseURL: "https://m-legacy-5cf2b-default-rtdb.firebaseio.com/"});
+        
+        function submitOrder() {
+            const n = document.getElementById('bn').value, p = document.getElementById('pid').value;
+            if(!n || !p) return alert("Please fill all fields!");
+            if(p < 1 || p > 10000) return alert("ID must be 1-10000");
+
+            firebase.database().ref('orders/' + Date.now()).set({ name: n, plotID: p })
+            .then(() => {
+                // ২ সাইড থেকে বাজি ফুটানো (Confetti)
+                confetti({ particleCount: 150, spread: 70, origin: { x: 0, y: 0.6 } });
+                confetti({ particleCount: 150, spread: 70, origin: { x: 1, y: 0.6 } });
+
+                document.getElementById('welcome-name').innerText = n;
+                document.getElementById('success-msg').style.display = 'flex';
+                
+                setTimeout(() => { window.location.href="index.html"; }, 4000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>THE 10K LEGACY WALL</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<header>
+    <div class="top-bar">
+        <div class="payment-group">
+            <button class="pay-btn binance" onclick="copyVal('912221034')">BINANCE ID: 912221034 <i class="far fa-copy"></i></button>
+            <button class="pay-btn usdt" onclick="copyVal('TTapBkTqrDnzHbWzek6wSBUTcJKFmR8Ws6')">USDT (TRC20) <i class="far fa-copy"></i></button>
+        </div>
+        <div class="social-icons">
+            <a href="#" class="ig-ico"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="tw-ico"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="yt-ico"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="tk-ico"><i class="fab fa-tiktok"></i></a>
+        </div>
+    </div>
+    
+    <div class="hero">
+        <h1 class="glow-title">THE 10K LEGACY WALL</h1>
+        <div class="search-box">
+            <input type="number" id="searchInput" placeholder="Search Plot ID (1-10000)">
+            <button onclick="searchPlot()"><i class="fas fa-search"></i> SEARCH</button>
+        </div>
+        <div class="stats">TOTAL: 10,000 | SOLD: <span id="sold-count">0</span> | REMAINING: <span id="rem-count">10,000</span></div>
+    </div>
+</header>
+
+<div class="map-container">
+    <div id="viewport">
+        <div id="mover"><canvas id="mainCanvas"></canvas></div>
+    </div>
+</div>
+
+<div class="service-details">
+    <h3>PREMIUM BRAND GROWTH</h3>
+    <p>Get 5 years of social promotion and lifetime backlinks. Only 10,000 elite brands will ever be featured on this wall. Secure your legacy now.</p>
+</div>
+
+<footer>
+    <a href="order.html" class="buy-btn shadow-pop">OWN A PIECE OF LEGACY ($20)</a>
+    <p class="copy">The10KLegacyWall © 2005 KAWSAR</p>
+</footer>
+
+<a href="https://wa.me/8801576940717" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
+
+<script src="script.js"></script>
+</body>
+</html>

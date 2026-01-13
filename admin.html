@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<body style="background:#fff; font-family:sans-serif; padding:20px;">
+    <div id="login" style="text-align:center; margin-top:50px;">
+        <h1>CEO LOGIN</h1>
+        <input type="password" id="pw" placeholder="Password" style="padding:10px; border:2px solid #000;">
+        <button onclick="auth()" style="padding:10px; background:#000; color:#fff; cursor:pointer;">LOGIN</button>
+    </div>
+
+    <div id="panel" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>PENDING ORDERS (10K WALL)</h2>
+            <a href="https://imgbb.com/upload" target="_blank" style="padding:10px; background:green; color:#fff; text-decoration:none; border-radius:5px;">UPLOAD LOGO</a>
+        </div>
+        <div id="list"></div>
+        <h2>HISTORY</h2>
+        <table border="1" width="100%" cellpadding="10" style="border-collapse:collapse;">
+            <thead><tr><th>Brand</th><th>ID</th><th>Logo</th></tr></thead>
+            <tbody id="h-list"></tbody>
+        </table>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script>
+        firebase.initializeApp({databaseURL: "https://m-legacy-5cf2b-default-rtdb.firebaseio.com/"});
+        const db = firebase.database();
+        function auth() { if(document.getElementById('pw').value==="KAWSARahmed22@@") { document.getElementById('login').style.display='none'; document.getElementById('panel').style.display='block'; load(); } }
+        function load() {
+            db.ref('orders').on('value', s => {
+                const list = document.getElementById('list'); list.innerHTML = "";
+                const data = s.val(); if(!data) return;
+                Object.keys(data).forEach(id => {
+                    list.innerHTML += `<div style="border:1px solid #000; padding:15px; margin-bottom:10px;">
+                        <b>${data[id].name}</b> (#${data[id].plotID})<br>
+                        <input type="text" id="img_${id}" placeholder="Image Link" style="width:80%; padding:8px; margin:5px 0;"><br>
+                        <input type="text" id="web_${id}" placeholder="Website" style="width:80%; padding:8px;"><br>
+                        <input type="number" id="plot_${id}" placeholder="Final ID" style="width:80%; padding:8px;"><br>
+                        <button onclick="approve('${id}', '${data[id].name}')" style="background:blue; color:#fff; padding:10px; border:none; margin-top:5px;">APPROVE</button>
+                    </div>`;
+                });
+            });
+            db.ref('history').on('value', s => {
+                const hList = document.getElementById('h-list'); hList.innerHTML = "";
+                const data = s.val(); if(!data) return;
+                Object.values(data).reverse().forEach(h => {
+                    hList.innerHTML += `<tr><td>${h.name}</td><td>#${h.plotID}</td><td><a href="${h.imageUrl}" target="_blank">View</a></td></tr>`;
+                });
+            });
+        }
+        function approve(id, name) {
+            const img=document.getElementById('img_'+id).value, web=document.getElementById('web_'+id).value, pID=parseInt(document.getElementById('plot_'+id).value);
+            const x=((pID-1)%100)*60, y=Math.floor((pID-1)/100)*40;
+            db.ref('pixels/'+id).set({name, imageUrl:img, link:web, x, y, plotID:pID})
+            .then(() => { db.ref('history/'+id).set({name, plotID:pID, imageUrl:img, timestamp:Date.now()}); db.ref('orders/'+id).remove(); alert("Published!"); });
+        }
+    </script>
+</body>
+</html>
